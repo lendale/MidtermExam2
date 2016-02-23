@@ -51,7 +51,7 @@ public class BookApi {
 
         Book book;
 
-        List booksList = new ArrayList<Book>();
+        List booksList = new ArrayList<>();
 
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
