@@ -3,6 +3,7 @@ package com.gabisan.midtermexam2.APIs;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.gabisan.midtermexam2.Entities.Book;
 import com.gabisan.midtermexam2.Utils.HttpUtils;
@@ -31,8 +32,8 @@ public class BookApi {
     private static final String B_AUTHOR = "author";
     private static final String B_ISREAD = "isRead";
 
-    public static List getBooks(Uri uri, @NonNull String requestMethod) {
-        String json = HttpUtils.getResponse(uri, requestMethod);
+    public static List getBooks() {
+        String json = HttpUtils.getResponse(BASE_URL + "/" + PARAM_API + "/" + PARAM_BOOKS, "get");
 
         if (TextUtils.isEmpty(json)) {
             return null;
@@ -47,7 +48,7 @@ public class BookApi {
 
         JSONArray jsonArray = new JSONArray();
 
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject;
 
         Book book;
 
@@ -78,5 +79,7 @@ public class BookApi {
         }
         return booksList;
     }
+
+
 
 }

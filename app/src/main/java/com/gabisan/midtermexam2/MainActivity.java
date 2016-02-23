@@ -6,10 +6,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import com.gabisan.midtermexam2.APIs.BookApi;
 
 public class MainActivity extends AppCompatActivity {
 
     ListView lvMainList;
+    TextView tvListItem;
+
+    BookApi bookApi = new BookApi();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
