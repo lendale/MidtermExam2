@@ -1,6 +1,5 @@
 package com.gabisan.midtermexam2.APIs;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -21,10 +19,7 @@ import java.util.List;
  */
 public class BookApi {
 
-    public static final String BASE_URL = "http://joseniandroid.herokuapp.com";
-
-    public static final String PARAM_API = "api";
-    public static final String PARAM_BOOKS = "books";
+    public static final String API_URL = "http://joseniandroid.herokuapp.com/api/books";
 
     private static final String B_ID = "_id";
     private static final String B_TITLE = "title";
@@ -32,8 +27,8 @@ public class BookApi {
     private static final String B_AUTHOR = "author";
     private static final String B_ISREAD = "isRead";
 
-    public static List getBooks() {
-        String json = HttpUtils.getResponse(BASE_URL + "/" + PARAM_API + "/" + PARAM_BOOKS, "get");
+    public static List<Book> getBooks() {
+        String json = HttpUtils.GET(API_URL);
 
         if (TextUtils.isEmpty(json)) {
             return null;
@@ -46,15 +41,15 @@ public class BookApi {
         String author;
         Boolean isRead;
 
-        JSONArray jsonArray = new JSONArray();
+        JSONArray jsonArray;
 
         JSONObject jsonObject;
 
-        Book book;
-
-        List booksList = new ArrayList<>();
+        List<Book> booksList = new ArrayList<>();
 
         try {
+            jsonArray = new JSONArray(json);
+            Log.d("JSON ARRAY SIZE", "" + jsonArray.length());
             for (int i = 0; i < jsonArray.length(); i++) {
                 jsonObject = jsonArray.getJSONObject(i);
 
@@ -64,22 +59,12 @@ public class BookApi {
                 author = jsonObject.getString(B_AUTHOR);
                 isRead = jsonObject.getBoolean(B_ISREAD);
 
-                book = new Book();
-
-                book.setmId(id);
-                book.setmTitle(title);
-                book.setmGenre(genre);
-                book.setmAuthor(author);
-                book.setmIsRead(isRead);
-
-                booksList.add(book);
+                booksList.add(new Book(id, title, genre, author, isRead));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return booksList;
     }
-
-
 
 }

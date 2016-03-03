@@ -1,21 +1,29 @@
 package com.gabisan.midtermexam2;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.gabisan.midtermexam2.APIs.BookApi;
+import com.gabisan.midtermexam2.Adapters.BooksAdapter;
+import com.gabisan.midtermexam2.Entities.Book;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView lvMainList;
-    TextView tvListItem;
+    ListView mMainListView;
+
+    getBookCollection getBooks = new getBookCollection();
 
     BookApi bookApi = new BookApi();
+
+    List<Book> books = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +32,26 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        lvMainList = (ListView) findViewById(R.id.lvMain_List);
+        mMainListView = (ListView) findViewById(R.id.mainListView);
+        getBooks.execute();
+    }
+
+    private class getBookCollection extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            books = bookApi.getBooks();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+
+            BooksAdapter adapter = new BooksAdapter(getApplicationContext(), R.layout.list_item, books);
+
+            mMainListView.setAdapter(adapter);
+        }
     }
 
     @Override
